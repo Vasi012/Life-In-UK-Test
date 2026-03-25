@@ -1,275 +1,192 @@
-import {
-    quizQuestionsDataBase
-} from "./questionnaire.js";
+import { quizQuestionsDataBase } from './questionnaire.js';
 
-//game instructions help
-var modal = document.getElementById("gameHelp");
+const TOTAL_QUESTIONS = 24;
+const PASS_MARK = Math.ceil(TOTAL_QUESTIONS * 0.65);
 
-//get the button that opens the modal
-var btn = document.getElementById("gameInstructions");
+const startPageBtn = document.getElementById('start-page-btn');
+const introPanel = document.getElementById('intro-panel');
+const beginQuizBtn = document.getElementById('begin-quiz-btn');
+const quizPanel = document.getElementById('quiz-panel');
+const questionEl = document.getElementById('question');
+const answersEl = document.getElementById('answers');
+const questionCount = document.getElementById('question-count');
+const submitBtn = document.getElementById('submit-btn');
+const resultPanel = document.getElementById('result-panel');
+const userScoreEl = document.getElementById('user-score');
+const messageEl = document.getElementById('message');
+const historySummaryEl = document.getElementById('history-summary');
+const passLikelihoodEl = document.getElementById('pass-likelihood');
+const retryBtn = document.getElementById('retry-btn');
 
-//get span element that close the modal
-var span = document.getElementsByClassName("close")[0];
+let shuffledQuestions = [];
+let currentIndex = 0;
+let selectedAnswers = new Set();
+let score = 0;
 
-/**
- * On click the ''personal message'' will open in block style.
- */
-btn.onclick = function () {
-    modal.style.display = "block";
-};
-
-/**
- * When clicked 'x' from personal message return to start game / game
- */
-span.onclick = function () {
-    modal.style.display = "none";
-};
-
-/**
- * This function will close the modal once clicked outside
- * of this.
- */
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+function randomSubset(list, size) {
+    const copy = [...list];
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
     }
-};
-
-//global variant for the game
-var quizQuestions = quizQuestionsDataBase;
-const startButton = document.getElementById("start-game");
-startButton.addEventListener("click", startGame);
-var selectedValue = null;
-let correctAnswerScore = 0;
-let incorrectAnswerScore = 0;
-let shuffledQuestions, currentQuestionIndexNumber;
-
-/**
- * This function will start the game, by pressing ''Start'' button you will be redirected 
- * to where the game takes place.
- */
-function startGame() {
-    startButton.classList.add("hide");
-    document.getElementById("question").classList.remove("hide");
-    shuffledQuestions = quizQuestions.sort(() => Math.random() - 0.5);
-    currentQuestionIndexNumber = 0;
-    document.getElementById("answer-buttons").classList.remove("hide");
-    setNextQuestion();
-    displayQuestion();
+    return copy.slice(0, size);
 }
 
-/**
- * This function will display a new question after user press
- * Submit and next button.
- */
-function displayNextQuestion() {
-    document.getElementById("next-btn").classList.add("hide");
-    document.getElementById("submit-btn").classList.remove("hide");
-    resetBackgroundColor();
-    displayQuestion();
-}
-
-/**
- * This function will call from data base a different random question
- */
-function setNextQuestion() {
-    displayNextQuestion(shuffledQuestions[currentQuestionIndexNumber]);
-}
-
-/**
- * This tracker will keep the number of question answered, 
- * when the answer == 10 will show personal message
- */
-function questionTracker() {
-    currentQuestionIndexNumber += 1;
-    let nextQuestBtn = document.getElementById("next-btn");
-    if (currentQuestionIndexNumber == 10) {
-        nextQuestBtn.innerHTML = "Show Results";
+function getHistory() {
+    const raw = localStorage.getItem('lifeInUKQuizHistory');
+    if (!raw) {
+        return { totalTests: 0, passedTests: 0, totalCorrect: 0 };
+    }
+    try {
+        return JSON.parse(raw);
+    } catch {
+        return { totalTests: 0, passedTests: 0, totalCorrect: 0 };
     }
 }
 
-
-/**
- * This function will display the questions from questionnaire to
- * each button a, b, c, d
- */
-function displayQuestion() {
-    let theQ = document.getElementById("question");
-    theQ.innerHTML = shuffledQuestions[currentQuestionIndexNumber].question;
-    let questionNumber = document.getElementById("question-number");
-    questionNumber.innerHTML = currentQuestionIndexNumber + 1;
-    let a = document.getElementsByClassName("btn")[0];
-    a.innerHTML = shuffledQuestions[currentQuestionIndexNumber].answers[0].answer;
-    let b = document.getElementsByClassName("btn")[1];
-    b.innerHTML = shuffledQuestions[currentQuestionIndexNumber].answers[1].answer;
-    let c = document.getElementsByClassName("btn")[2];
-    c.innerHTML = shuffledQuestions[currentQuestionIndexNumber].answers[2].answer;
-    let d = document.getElementsByClassName("btn")[3];
-    d.innerHTML = shuffledQuestions[currentQuestionIndexNumber].answers[3].answer;
-
-    const buttons = document.getElementsByClassName("btn")
-    for (const button of buttons) {
-        button.disabled = false;
+function updateHistory(currentScore) {
+    const history = getHistory();
+    history.totalTests += 1;
+    history.totalCorrect += currentScore;
+    if (currentScore >= PASS_MARK) {
+        history.passedTests += 1;
     }
+    localStorage.setItem('lifeInUKQuizHistory', JSON.stringify(history));
+    return history;
 }
 
-/**
- * When answer is selected this in innerHTML.
- */
-function answerSelected() {
-    selectedValue = this.innerHTML;
+function renderHistory(history) {
+    const avgScore = history.totalTests ? (history.totalCorrect / history.totalTests).toFixed(1) : '0.0';
+    const passRate = history.totalTests ? Math.round((history.passedTests / history.totalTests) * 100) : 0;
+    historySummaryEl.textContent = `Total attempts: ${history.totalTests}. Passed: ${history.passedTests}. Average score: ${avgScore}/${TOTAL_QUESTIONS}.`;
+    passLikelihoodEl.textContent = `Estimated pass likelihood: ${passRate}%`;
 }
 
-/**
- * When answer clicked, this will change his propriety from initial
- * color to teal color.
- * 
- */
-function answerHighlighted() {
-    resetBackgroundColor()
-    this.style.backgroundColor = "teal";
+function showPanel(panel) {
+    [introPanel, quizPanel, resultPanel].forEach((el) => el.classList.add('hidden'));
+    panel.classList.remove('hidden');
 }
 
-/**
- * Once a button is pressed and the user moves to next question,
- * all the answer buttons will be reset to the initial color.
- * 
- */
-function resetBackgroundColor() {
-    let buttons = document.getElementsByClassName("btn");
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].style.backgroundColor = "#006487";
-    }
+function startFromLanding() {
+    showPanel(introPanel);
+    startPageBtn.classList.add('hidden');
 }
 
-//event listeners to the selected answer on clicks
-let buttons = document.getElementsByClassName("btn");
-for (let i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener("click", answerHighlighted);
-    buttons[i].addEventListener("click", answerSelected);
+function beginQuiz() {
+    shuffledQuestions = randomSubset(quizQuestionsDataBase, TOTAL_QUESTIONS);
+    currentIndex = 0;
+    score = 0;
+    selectedAnswers = new Set();
+    showPanel(quizPanel);
+    renderQuestion();
 }
 
-/**
- * checkAnswer will check the answer if the answer is correct
- * the user will receive 1 correct answer if not, 1 incorrect answer.
- */
-function checkAnswer() {
-    let buttons = document.getElementsByClassName("btn");
-    for (const button of buttons) {
-        button.disabled = true;
-    }
-    if (selectedValue === shuffledQuestions[currentQuestionIndexNumber].correctAnswer) {
-        for (let i = 0; i < buttons.length; i++) {
-            if (buttons[i].textContent === selectedValue) {
-                buttons[i].style.backgroundColor = "green";
+function renderQuestion() {
+    const q = shuffledQuestions[currentIndex];
+    questionEl.textContent = q.question;
+    questionCount.textContent = `${currentIndex + 1}/${TOTAL_QUESTIONS}`;
+    answersEl.innerHTML = '';
+    selectedAnswers = new Set();
+
+    const multi = q.correctAnswers.length > 1;
+
+    q.answers.forEach((item) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn answer-btn';
+        btn.textContent = item;
+        btn.type = 'button';
+        btn.addEventListener('click', () => {
+            if (multi) {
+                if (selectedAnswers.has(item)) {
+                    selectedAnswers.delete(item);
+                    btn.classList.remove('selected');
+                } else {
+                    selectedAnswers.add(item);
+                    btn.classList.add('selected');
+                }
+            } else {
+                selectedAnswers.clear();
+                document.querySelectorAll('.answer-btn').forEach((b) => b.classList.remove('selected'));
+                selectedAnswers.add(item);
+                btn.classList.add('selected');
             }
-        }
-    } else if (selectedValue !== shuffledQuestions[currentQuestionIndexNumber].correctAnswer) {
-        for (let i = 0; i < buttons.length; i++) {
-            if (buttons[i].textContent === selectedValue) {
-                buttons[i].style.backgroundColor = "crimson";
-            } else if (buttons[i].textContent === shuffledQuestions[currentQuestionIndexNumber].correctAnswer) {
-                buttons[i].style.backgroundColor = "green";
-            }
-        }
-    }
-    selectedValue = null;
+        });
+        answersEl.appendChild(btn);
+    });
 }
 
-/**
- * This function will count the score every time when a question
- * has been answer. Incorrect / correct.
- */
-function countScore() {
-    if (selectedValue === shuffledQuestions[currentQuestionIndexNumber].correctAnswer) {
-        correctAnswerScore += 1;
+function endQuiz() {
+    showPanel(resultPanel);
+    userScoreEl.textContent = score;
+
+    if (score >= PASS_MARK) {
+        messageEl.textContent = `Great job! You passed with ${score}/${TOTAL_QUESTIONS}.`;
     } else {
-        incorrectAnswerScore += 1;
+        messageEl.textContent = `Keep practicing — you scored ${score}/${TOTAL_QUESTIONS}.`;
     }
-}
-//global variant for the game
-//create variable of the submitAnswers and nextQuestions button
-let submitAnsBtn = document.getElementById("submit-btn");
-let nextQuestBtn = document.getElementById("next-btn");
 
-/**
- * Once 'Submit' button is pressed, the next button will be present
- * directing you on to the next question.
- */
-function nextQuestionsButtonDisplay() {
-    document.getElementById("next-btn").classList.remove("hide");
-    document.getElementById("submit-btn").classList.add("hide");
+    const history = updateHistory(score);
+    renderHistory(history);
 }
 
-/**
- * This function will submit the answer 
- * by pressing 'submit' button.
- * 
- */
-function submitAnswer() {
-    if (selectedValue == null) {
-        return alert("Please select an answer");
-    } else if (selectedValue != null) {
-        countScore();
-        checkAnswer();
-        nextQuestionsButtonDisplay();
-        questionTracker();
+function submitCurrentAnswer() {
+    if (selectedAnswers.size === 0) {
+        alert('Please choose an answer first.');
+        return;
     }
-}
 
-submitAnsBtn.addEventListener("click", submitAnswer);
+    const q = shuffledQuestions[currentIndex];
+    const correctSet = new Set(q.correctAnswers);
 
-/**
- * This function will return the results
- * when the test its finish.
- *
- */
-function returnResults() {
-    let totalScore = correctAnswerScore + incorrectAnswerScore;
-    if (totalScore === 10) {
-        document.getElementById("question").classList.add("hide");
-        document.getElementById("answer-buttons").classList.add("hide");
-        document.getElementById("next-btn").classList.add("hide");
-        document.getElementById("submit-btn").classList.add("hide");
-        document.getElementById("result-box").classList.remove("hide");
+    document.querySelectorAll('.answer-btn').forEach((btn) => {
+        btn.disabled = true;
+        const text = btn.textContent;
+        if (correctSet.has(text)) {
+            btn.classList.add('correct');
+        } else if (btn.classList.contains('selected')) {
+            btn.classList.add('incorrect');
+        } else {
+            btn.classList.add('muted');
+        }
+    });
+
+    let isCorrect = selectedAnswers.size === correctSet.size;
+    if (isCorrect) {
+        selectedAnswers.forEach((answer) => {
+            if (!correctSet.has(answer)) {
+                isCorrect = false;
+            }
+        });
     }
-    //variable of userScore
-    let userScore = document.getElementById("user-score");
-    userScore.innerHTML = correctAnswerScore;
-    let personalMessage = document.getElementById("personal-message");
-    if (correctAnswerScore == 0) {
-        personalMessage.innerHTML = "Opps...Looks like you have to learn some geography... Try again!";
-    } else if (correctAnswerScore < 3) {
-        personalMessage.innerHTML = "Not too bad, but I'm sure you can do better next time!";
-    } else if (correctAnswerScore < 6) {
-        personalMessage.innerHTML = "Well, it's better than nothing :), try again!";
-    } else if (correctAnswerScore < 9) {
-        personalMessage.innerHTML = "Wow you are amazing, try again and get 10/10, let's see if you can!";
-    } else if (correctAnswerScore == 10) {
-        personalMessage.innerHTML = "WOW 10/10 YOU ARE AWESOME. Ladies and gentleman THE WINNER!";
+
+    if (isCorrect) {
+        score += 1;
     }
+
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+        submitBtn.disabled = false;
+        currentIndex += 1;
+        if (currentIndex >= TOTAL_QUESTIONS) {
+            endQuiz();
+        } else {
+            renderQuestion();
+        }
+    }, 1500);
 }
 
-//display Next Question
-nextQuestBtn.addEventListener("click", displayNextQuestion);
-
-nextQuestBtn.addEventListener("click", returnResults);
-
-/**
- * This function will reset the game values
- * all the values will become now 0.
- */
-function resetGameValues() {
-    currentQuestionIndexNumber = 1;
-    correctAnswerScore = 0;
-    incorrectAnswerScore = 0;
-    document.getElementById("submit-btn").classList.remove("hide");
-    document.getElementById("result-box").classList.add("hide");
-    document.getElementById("next-btn").innerHTML = "Next Question";
+function resetApplication() {
+    startPageBtn.classList.remove('hidden');
+    showPanel(introPanel);
 }
 
-//global variant for the game
-//start a new game
-let startNewGameBtn = document.getElementById("start-new-game-btn");
-startNewGameBtn.addEventListener("click", resetGameValues);
-startNewGameBtn.addEventListener("click", startGame);
+startPageBtn.addEventListener('click', startFromLanding);
+beginQuizBtn.addEventListener('click', beginQuiz);
+submitBtn.addEventListener('click', submitCurrentAnswer);
+retryBtn.addEventListener('click', resetApplication);
+
+window.addEventListener('load', () => {
+    const history = getHistory();
+    renderHistory(history);
+});

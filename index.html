@@ -3,77 +3,51 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <meta name="description" content="geography, quiz, questionaire, world, map">
-    <meta name="keywords" content="geography, questionaire, worldwide">
-
-    <!--stylesheet-->
-    <link rel="stylesheet" href="assets/css/style.css">
-
-    <!--Favicon-->
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
-    <link rel="mask-icon" href="assets/images/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Life in the UK Test - 24-question quiz on UK history, government, culture and everyday life.">
+    <meta name="keywords" content="UK test, citizenship, civics, life in the UK, practice quiz">
     <meta name="author" content="Pavaloi Vasilica-Catalin">
 
-    <!--Project Title & background-->
-
-    <title>Do you know?!</title>
-
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Life in the UK Test</title>
 </head>
 
 <body>
-    <!--Logo & Header-->
-    <header>
-        <h1>Geography Quiz</h1>
-        <button id="gameInstructions">Instructions</button>
+    <main class="page-wrap">
+        <header class="hero">
+            <h1>Life in the UK Test</h1>
+            <p class="subtitle">A prestige-style 24-question practice quiz for UK life knowledge.</p>
+            <button id="start-page-btn" class="btn-primary">Start Quiz</button>
+        </header>
 
-        <div id="gameHelp" class="modal">
-            <div class="hidden-instructions">
-                <span class="close">&times;</span>
-                <p>Welcome Geography knowers, here is the quiz zone... You ready to prove everyone your knowledge?
-                    Answer the next 10 questions and prove everyone that you are the best! In case the questions are to
-                    hard we will help you with 4 diferent answers, just one of them is corect. Chose whisley and submit
-                    your answer. At the end of this test you will see your score.</p>
-                <pre>Ready?!</pre>
+        <section id="intro-panel" class="panel hidden">
+            <h2>Welcome Instructions</h2>
+            <p>Complete 24 multiple-choice questions about UK history, government, and everyday life.</p>
+            <p>After answer submission, correct option is highlighted green and incorrect red, then auto-advances in 1.5 seconds.</p>
+            <p>Scoring: 16 or more is pass (65%).</p>
+            <button id="begin-quiz-btn" class="btn-secondary">Begin the Test</button>
+        </section>
+
+        <section id="quiz-panel" class="panel hidden">
+            <div class="question-header">
+                <span id="question-count">1/24</span>
             </div>
-        </div>
-    </header>
+            <div id="question" class="question-text">Question will appear here</div>
+            <div id="answers" class="answer-grid"></div>
+            <button id="submit-btn" class="btn-primary">Submit Answer</button>
+        </section>
 
-    <!--Game field-->
-    <div class="game-area">
-        <button id="start-game" class="start-game">Start!</button>
-        <div id="question" class="hide">Q) What is ............. ?</div>
-        <div id="answer-buttons" class="btn-grid hide">
-            <button id="button-a" class="btn">A.</button>
-            <button id="button-b" class="btn">B.</button>
-            <button id="button-c" class="btn">C.</button>
-            <button id="button-d" class="btn">D.</button>
+        <section id="result-panel" class="panel hidden">
+            <h2>Quiz Results</h2>
+            <p>Your score: <strong><span id="user-score">0</span>/24</strong></p>
+            <p id="message">Take the quiz to see your performance.</p>
+            <p id="history-summary">No history yet. Complete a test to start tracking.</p>
+            <p id="pass-likelihood">Estimated pass likelihood: 0%</p>
+            <button id="retry-btn" class="btn-secondary">Retake the Life in the UK Test</button>
+        </section>
+    </main>
 
-            <!--Submit Button-->
-            <button id="submit-btn" data-type="submit" class="submit-btn">Submit Answer</button>
-            <button id="next-btn" data-type="submit" class="next-btn hide">Next Question</button>
-            <!--Number of the question-->
-            <div class="question-counter">
-                <p><span id="question-number">1</span>/<span>10</span></p>
-            </div>
-        </div>
-        <!--Result Display-->
-        <div id="result-box" class="hide">
-            <p>You achieved the score of: <span id="user-score">0</span>/10!</p>
-            <br>
-            <div id="personal-message">Personal message</div>
-            <button id="start-new-game-btn">Start a New Questionaire!</button>
-        </div>
-    </div>
-    <!--Footer-->
-    <footer class="dead-space"></footer>
-    <script src="https://kit.fontawesome.com/57a5431661.js" crossorigin="anonymous"></script>
     <script type="module" src="assets/js/script.js"></script>
-    <script type="module" src="assets/js/questionaire.js"></script>
 </body>
 
 </html>
