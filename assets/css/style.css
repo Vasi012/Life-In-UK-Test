@@ -77,11 +77,98 @@ body {
 .hidden { display: none !important; }
 
 .question-header {
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-weight: 700;
     margin-bottom: 10px;
     color: #b7bee3;
 }
+
+.timer {
+    background: rgba(217, 186, 60, 0.2);
+    color: #ffece0;
+    border: 1px solid rgba(236, 206, 83, 0.8);
+    border-radius: 10px;
+    padding: 4px 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.progress-container {
+    margin-bottom: 14px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    border-radius: 999px;
+    background: rgba(136, 143, 176, 0.32);
+    border: 1px solid rgba(180, 192, 236, 0.35);
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #6df261, #79b9ff);
+    transition: width 0.25s ease;
+}
+
+.review-panel {
+    margin-top: 16px;
+    border-top: 1px solid rgba(225, 220, 255, 0.18);
+    padding-top: 12px;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.review-item {
+    margin-bottom: 12px;
+    padding: 10px;
+    background: rgba(20, 30, 60, 0.9);
+    border-radius: 10px;
+    border: 1px solid rgba(135, 145, 175, 0.45);
+}
+
+.review-title {
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+.review-title.correct { color: #7af06f; }
+.review-title.incorrect { color: #ff9796; }
+
+.review-detail { margin-bottom: 4px; font-size: 0.9rem; }
+
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+.confetti-piece {
+    position: absolute;
+    top: -8px;
+    transform: rotate(45deg);
+    opacity: 0.9;
+    border-radius: 3px;
+    animation-name: confetti-fall;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
+}
+
+@keyframes confetti-fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(102vh) rotate(360deg); opacity: 0; }
+}
+
+.confetti-container.fade-out { opacity: 0; transition: opacity 0.4s ease; }
 
 .question-text {
     font-size: clamp(1rem, 2vw, 1.5rem);

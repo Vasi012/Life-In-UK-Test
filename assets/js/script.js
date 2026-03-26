@@ -1,7 +1,8 @@
 import { quizQuestionsDataBase } from './questionnaire.js';
 
 const TOTAL_QUESTIONS = 24;
-const PASS_MARK = Math.ceil(TOTAL_QUESTIONS * 0.65);
+const PASS_MARK = Math.ceil(TOTAL_QUESTIONS * 0.8); // 80% pass mark
+const QUIZ_DURATION_MS = 45 * 60 * 1000; // 45 minutes
 
 const startPageBtn = document.getElementById('start-page-btn');
 const introPanel = document.getElementById('intro-panel');
@@ -10,18 +11,24 @@ const quizPanel = document.getElementById('quiz-panel');
 const questionEl = document.getElementById('question');
 const answersEl = document.getElementById('answers');
 const questionCount = document.getElementById('question-count');
+const timerEl = document.getElementById('timer');
+const progressFillEl = document.getElementById('progress-fill');
 const submitBtn = document.getElementById('submit-btn');
 const resultPanel = document.getElementById('result-panel');
 const userScoreEl = document.getElementById('user-score');
 const messageEl = document.getElementById('message');
 const historySummaryEl = document.getElementById('history-summary');
 const passLikelihoodEl = document.getElementById('pass-likelihood');
+const reviewPanel = document.getElementById('review-panel');
 const retryBtn = document.getElementById('retry-btn');
 
 let shuffledQuestions = [];
 let currentIndex = 0;
 let selectedAnswers = new Set();
 let score = 0;
+let answeredQuestions = [];
+let timerInterval = null;
+let timeLeftMs = QUIZ_DURATION_MS;
 
 function randomSubset(list, size) {
     const copy = [...list];
@@ -62,6 +69,100 @@ function renderHistory(history) {
     passLikelihoodEl.textContent = `Estimated pass likelihood: ${passRate}%`;
 }
 
+function formatTime(ms) {
+    const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+    const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+    const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+    return `${minutes}:${seconds}`;
+}
+
+function updateTimerDisplay() {
+    timerEl.textContent = formatTime(timeLeftMs);
+}
+
+function clearQuizTimer() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+}
+
+function startQuizTimer() {
+    clearQuizTimer();
+    timeLeftMs = QUIZ_DURATION_MS;
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeftMs -= 1000;
+        if (timeLeftMs <= 0) {
+            timeLeftMs = 0;
+            updateTimerDisplay();
+            clearQuizTimer();
+            // Auto-end quiz on timeout
+            endQuiz();
+            return;
+        }
+        updateTimerDisplay();
+    }, 1000);
+}
+
+function updateProgress() {
+    const progress = Math.round((currentIndex / TOTAL_QUESTIONS) * 100);
+    progressFillEl.style.width = `${progress}%`;
+}
+
+function buildReviewItem(entry, index) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'review-item';
+
+    const status = entry.isCorrect ? 'Correct' : 'Incorrect';
+    wrapper.innerHTML = `
+        <div class="review-title ${entry.isCorrect ? 'correct' : 'incorrect'}">${index + 1}. ${status} - ${entry.question}</div>
+        <div class="review-detail"><strong>Your answer:</strong> ${entry.selectedAnswers.join(', ') || '<em>No answer</em>'}</div>
+        <div class="review-detail"><strong>Correct answer:</strong> ${entry.correctAnswers.join(', ')}</div>
+        <div class="review-detail"><strong>Explanation:</strong> ${entry.explanation}</div>
+    `;
+
+    return wrapper;
+}
+
+function renderReviewPanel() {
+    reviewPanel.innerHTML = '';
+    const heading = document.createElement('h3');
+    heading.textContent = 'Review: all 24 questions from this quiz';
+    reviewPanel.appendChild(heading);
+
+    answeredQuestions.forEach((entry, index) => {
+        reviewPanel.appendChild(buildReviewItem(entry, index));
+    });
+}
+
+function fireConfetti(duration = 2000) {
+    const confettiContainer = document.createElement('div');
+    confettiContainer.className = 'confetti-container';
+
+    const totalPieces = 120;
+    for (let i = 0; i < totalPieces; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        const size = Math.random() * 8 + 6;
+        piece.style.width = `${size}px`;
+        piece.style.height = `${size * 0.4}px`;
+        piece.style.backgroundColor = ['#ff4b4b', '#ffe55a', '#7af2a7', '#5ec4ff', '#d68cff'][Math.floor(Math.random() * 5)];
+        piece.style.left = `${Math.random() * 100}%`;
+        piece.style.animationDuration = `${Math.random() * 1.5 + 1.5}s`;
+        piece.style.animationDelay = `${Math.random() * 0.8}s`;
+        confettiContainer.appendChild(piece);
+    }
+
+    document.body.appendChild(confettiContainer);
+    setTimeout(() => {
+        confettiContainer.classList.add('fade-out');
+    }, duration - 250);
+    setTimeout(() => {
+        confettiContainer.remove();
+    }, duration + 300);
+}
+
 function showPanel(panel) {
     [introPanel, quizPanel, resultPanel].forEach((el) => el.classList.add('hidden'));
     panel.classList.remove('hidden');
@@ -77,7 +178,11 @@ function beginQuiz() {
     currentIndex = 0;
     score = 0;
     selectedAnswers = new Set();
+    answeredQuestions = [];
+    reviewPanel.innerHTML = '';
+    startQuizTimer();
     showPanel(quizPanel);
+    updateProgress();
     renderQuestion();
 }
 
@@ -113,20 +218,26 @@ function renderQuestion() {
         });
         answersEl.appendChild(btn);
     });
+
+    updateProgress();
 }
 
 function endQuiz() {
+    clearQuizTimer();
+    updateProgress();
     showPanel(resultPanel);
     userScoreEl.textContent = score;
 
     if (score >= PASS_MARK) {
         messageEl.textContent = `Great job! You passed with ${score}/${TOTAL_QUESTIONS}.`;
+        fireConfetti(2000);
     } else {
         messageEl.textContent = `Keep practicing — you scored ${score}/${TOTAL_QUESTIONS}.`;
     }
 
     const history = updateHistory(score);
     renderHistory(history);
+    renderReviewPanel();
 }
 
 function submitCurrentAnswer() {
@@ -163,6 +274,14 @@ function submitCurrentAnswer() {
         score += 1;
     }
 
+    answeredQuestions.push({
+        question: q.question,
+        selectedAnswers: Array.from(selectedAnswers),
+        correctAnswers: q.correctAnswers,
+        isCorrect,
+        explanation: isCorrect ? q.explanation.correct : q.explanation.incorrect,
+    });
+
     submitBtn.disabled = true;
 
     setTimeout(() => {
@@ -173,10 +292,14 @@ function submitCurrentAnswer() {
         } else {
             renderQuestion();
         }
-    }, 1500);
+    }, 500);
 }
 
 function resetApplication() {
+    clearQuizTimer();
+    timeLeftMs = QUIZ_DURATION_MS;
+    updateTimerDisplay();
+    progressFillEl.style.width = '0%';
     startPageBtn.classList.remove('hidden');
     showPanel(introPanel);
 }

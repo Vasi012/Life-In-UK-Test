@@ -23,14 +23,18 @@
         <section id="intro-panel" class="panel hidden">
             <h2>Welcome Instructions</h2>
             <p>Complete 24 multiple-choice questions about UK history, government, and everyday life.</p>
-            <p>After answer submission, correct option is highlighted green and incorrect red, then auto-advances in 1.5 seconds.</p>
-            <p>Scoring: 16 or more is pass (65%).</p>
+            <p>After answer submission, correct option is highlighted green and incorrect red, then auto-advances in 0.5 seconds.</p>
+            <p>Scoring: 19 or more is pass (80%).</p>
             <button id="begin-quiz-btn" class="btn-secondary">Begin the Test</button>
         </section>
 
         <section id="quiz-panel" class="panel hidden">
             <div class="question-header">
                 <span id="question-count">1/24</span>
+                <span id="timer" class="timer">45:00</span>
+            </div>
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
             </div>
             <div id="question" class="question-text">Question will appear here</div>
             <div id="answers" class="answer-grid"></div>
@@ -43,6 +47,7 @@
             <p id="message">Take the quiz to see your performance.</p>
             <p id="history-summary">No history yet. Complete a test to start tracking.</p>
             <p id="pass-likelihood">Estimated pass likelihood: 0%</p>
+            <div id="review-panel" class="review-panel"></div>
             <button id="retry-btn" class="btn-secondary">Retake the Life in the UK Test</button>
         </section>
     </main>
