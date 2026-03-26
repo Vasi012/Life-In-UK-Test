@@ -51,7 +51,7 @@ Life-In-UK-Test/
   - Single-answer question: user picks one option.
   - Multi-answer (when `q.correctAnswers.length > 1`): user toggles multiple, must match exact set.
 - **Score tracking**: 1 point per correct answer (no partial credit).
-- **Pass threshold**: `PASS_MARK = Math.ceil(TOTAL_QUESTIONS * 0.65)` (currently 16/24 to pass).
+- **Pass threshold**: `PASS_MARK = Math.ceil(TOTAL_QUESTIONS * 0.8)` (currently 20/24 to pass).
 - **Visual feedback**:
   - `.correct` — green highlight for right answers.
   - `.incorrect` — red highlight for wrong user choice.
@@ -167,7 +167,7 @@ Multi-answer example:
 Edit `assets/js/script.js`:
 ```javascript
 const TOTAL_QUESTIONS = 24;  // Change to any number
-const PASS_MARK = Math.ceil(TOTAL_QUESTIONS * 0.65);  // Adjust threshold
+const PASS_MARK = Math.ceil(TOTAL_QUESTIONS * 0.8);  // Adjust threshold
 ```
 
 ### Add / edit questions

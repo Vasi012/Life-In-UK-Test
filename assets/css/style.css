@@ -142,6 +142,10 @@ body {
 
 .review-detail { margin-bottom: 4px; font-size: 0.9rem; }
 
+.review-options { margin-left: 1rem; padding-left: 0.2rem; }
+.review-options li { margin-bottom: 8px; }
+.review-subtext { font-size: 0.88rem; color: #c6c8d9; margin-left: 14px; margin-top: 2px; }
+
 .confetti-container {
     position: fixed;
     top: 0;
