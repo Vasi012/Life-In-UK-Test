@@ -15,6 +15,7 @@ const timerEl = document.getElementById('timer');
 const progressFillEl = document.getElementById('progress-fill');
 const submitBtn = document.getElementById('submit-btn');
 const resultPanel = document.getElementById('result-panel');
+const retryBtn = document.getElementById('retry-btn');
 const userScoreEl = document.getElementById('user-score');
 const messageEl = document.getElementById('message');
 const historySummaryEl = document.getElementById('history-summary');
