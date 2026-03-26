@@ -279,7 +279,7 @@ function submitCurrentAnswer() {
         selectedAnswers: Array.from(selectedAnswers),
         correctAnswers: q.correctAnswers,
         isCorrect,
-        explanation: isCorrect ? q.explanation.correct : q.explanation.incorrect,
+        explanation: q.explanation || 'No explanation available.',
     });
 
     submitBtn.disabled = true;

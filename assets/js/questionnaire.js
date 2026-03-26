@@ -3,122 +3,146 @@ const initialQuestions = [
     {
         question: "Who were the first people to arrive in Britain, in what we call the Stone Age?",
         answers: ["Farmers", "Hunter-gatherers", "Warriors", "Pirates"],
-        correctAnswers: ["Hunter-gatherers"]
+        correctAnswers: ["Hunter-gatherers"],
+        explanation: "The very first inhabitants of Britain lived by hunting animals and gathering wild plants during the Stone Age. Farming came later during the Neolithic period."
     },
     {
         question: "When did Britain become permanently separated from the continent by the English Channel?",
         answers: ["50,000 years ago", "18,000 years ago", "15,000 years ago", "10,000 years ago"],
-        correctAnswers: ["10,000 years ago"]
+        correctAnswers: ["10,000 years ago"],
+        explanation: "As the last Ice Age ended and sea levels rose, the land bridge between Britain and continental Europe flooded permanently around 10,000 years ago."
     },
     {
         question: "What is the best preserved prehistoric village in northern Europe, dating to the Stone Age?",
         answers: ["Maiden Castle", "Stonehenge", "Skara Brae", "Avebury"],
-        correctAnswers: ["Skara Brae"]
+        correctAnswers: ["Skara Brae"],
+        explanation: "Located on Orkney, off the north coast of Scotland, Skara Brae is a remarkably well-preserved Neolithic village revealing how people lived at the end of the Stone Age."
     },
     {
         question: "Which of the following is NOT a fundamental principle of British life?",
         answers: ["Tolerance of those with different faiths and beliefs", "The rule of law", "Autocracy", "Democracy"],
-        correctAnswers: ["Autocracy"]
+        correctAnswers: ["Autocracy"],
+        explanation: "Autocracy (rule by a single person with unlimited power) is the opposite of British democratic values. The UK is based on tolerance, the rule of law, and democracy."
     },
     {
         question: "During whose reign did Wales become formally united with England by the Act for the Government of Wales?",
         answers: ["Henry VII", "Henry VIII", "Elizabeth I", "James I"],
-        correctAnswers: ["Henry VIII"]
+        correctAnswers: ["Henry VIII"],
+        explanation: "The Acts of Union 1535–1542 formally united Wales with England during Henry VIII's reign."
     },
     {
         question: "The Elizabethan period is known especially for the plays and poems of which playwright?",
         answers: ["Alexander Dumas", "Charles Dickens", "Thomas Hardy", "William Shakespeare"],
-        correctAnswers: ["William Shakespeare"]
+        correctAnswers: ["William Shakespeare"],
+        explanation: "William Shakespeare (1564–1616) is the defining literary figure of the Elizabethan era, writing plays such as Hamlet, Othello and A Midsummer Night's Dream."
     },
     {
         question: "Which TWO of the following are environmental charities?",
         answers: ["Crisis", "The National Trust", "Friends of the Earth", "Oxfam"],
-        correctAnswers: ["The National Trust", "Friends of the Earth"]
+        correctAnswers: ["The National Trust", "Friends of the Earth"],
+        explanation: "The National Trust is dedicated to preserving historic places and natural environments in the UK. Friends of the Earth is an international environmental campaign organisation."
     },
     {
         question: "Which flag has a diagonal red cross on a white background?",
         answers: ["The Cross of St George", "The Cross of St Andrew", "The Cross of St Patrick", "The Cross of St David"],
-        correctAnswers: ["The Cross of St Patrick"]
+        correctAnswers: ["The Cross of St Patrick"],
+        explanation: "St Patrick's Cross is a red diagonal cross on a white background, representing Ireland. St George's Cross (England) is vertical, St Andrew's is white on blue (Scotland)."
     },
     {
         question: "Which British sportsman won five consecutive gold medals at the Olympic Games in rowing?",
         answers: ["Roger Bannister", "Sir Steve Redgrave", "Bradley Wiggins", "Mo Farah"],
-        correctAnswers: ["Sir Steve Redgrave"]
+        correctAnswers: ["Sir Steve Redgrave"],
+        explanation: "Sir Steve Redgrave won gold medals at five consecutive Olympic Games from 1984 to 2000, making him one of Britain's greatest Olympians."
     },
     {
         question: "What does the UK offer to its residents or citizens? (Choose TWO)",
         answers: ["Freedom of belief and religion", "Free housing for all", "Freedom of speech", "Free university education for all"],
-        correctAnswers: ["Freedom of belief and religion", "Freedom of speech"]
+        correctAnswers: ["Freedom of belief and religion", "Freedom of speech"],
+        explanation: "The UK upholds freedom of religion and freedom of speech as fundamental rights. Housing support and university education are not universally free."
     },
     {
         question: "In 1455, a civil war was fought between the House of Lancaster and the House of York. What was it called?",
         answers: ["The English Civil War", "The Wars of the Roses", "The Battle of Hastings", "The Peasants' Revolt"],
-        correctAnswers: ["The Wars of the Roses"]
+        correctAnswers: ["The Wars of the Roses"],
+        explanation: "The Wars of the Roses (1455–1487) were a series of civil wars between the Lancastrians (red rose) and the Yorkists (white rose)."
     },
     {
         question: "How many members does the Scottish Parliament have?",
         answers: ["100", "108", "129", "150"],
-        correctAnswers: ["129"]
+        correctAnswers: ["129"],
+        explanation: "The Scottish Parliament has 129 Members of the Scottish Parliament (MSPs)."
     },
     {
         question: "What is the capital city of Northern Ireland?",
         answers: ["Dublin", "Cork", "Edinburgh", "Belfast"],
-        correctAnswers: ["Belfast"]
+        correctAnswers: ["Belfast"],
+        explanation: "Belfast is the capital and largest city of Northern Ireland. Dublin is the capital of the Republic of Ireland."
     },
     {
         question: "When did the First World War end?",
         answers: ["9th November 1918", "11th December 1918", "11th November 1918", "9th December 1918"],
-        correctAnswers: ["11th November 1918"]
+        correctAnswers: ["11th November 1918"],
+        explanation: "The Armistice was signed at 11am on 11 November 1918, ending World War One."
     },
     {
         question: "Who established the Church of England?",
         answers: ["Elizabeth I", "The Archbishop of Canterbury", "Henry VIII", "King Charles III"],
-        correctAnswers: ["Henry VIII"]
+        correctAnswers: ["Henry VIII"],
+        explanation: "Henry VIII broke from Rome and established the Church of England after the Pope refused to annul his marriage to Catherine of Aragon."
     },
     {
         question: "Which Scottish city is known as the home of golf?",
         answers: ["Dundee", "Aberdeen", "Edinburgh", "St Andrews"],
-        correctAnswers: ["St Andrews"]
+        correctAnswers: ["St Andrews"],
+        explanation: "St Andrews in Fife is widely regarded as the home of golf, and the Royal and Ancient Golf Club is based there."
     },
     {
         question: "When was the National Trust founded?",
         answers: ["1890", "1910", "1895", "1980"],
-        correctAnswers: ["1895"]
+        correctAnswers: ["1895"],
+        explanation: "The National Trust was founded in 1895 by three volunteers to preserve places of historic interest and natural beauty."
     },
     {
         question: "After the Black Death, new social classes appeared in England, including large landowners known as:",
         answers: ["Clans", "Nobility", "Judiciary", "Gentry"],
-        correctAnswers: ["Gentry"]
+        correctAnswers: ["Gentry"],
+        explanation: "Following the labour shortages caused by the Black Death, a new class of large landowners known as the gentry emerged in England."
     },
     {
         question: "Elizabeth I was the younger daughter of which King?",
         answers: ["James I", "Henry VII", "William the Conqueror", "Henry VIII"],
-        correctAnswers: ["Henry VIII"]
+        correctAnswers: ["Henry VIII"],
+        explanation: "Elizabeth I was the daughter of Henry VIII and his second wife, Anne Boleyn."
     },
     {
         question: "Which of the following operas was written by Gilbert and Sullivan?",
         answers: ["The Phantom of the Opera", "Cats", "The Mousetrap", "The Mikado"],
-        correctAnswers: ["The Mikado"]
+        correctAnswers: ["The Mikado"],
+        explanation: "The Mikado (1885) is one of the most famous comic operas written by W.S. Gilbert and Arthur Sullivan."
     },
     {
         question: "Where is Loch Lomond and the Trossachs National Park located?",
         answers: ["East of Scotland", "East of Wales", "West of Wales", "West of Scotland"],
-        correctAnswers: ["West of Scotland"]
+        correctAnswers: ["West of Scotland"],
+        explanation: "Loch Lomond and the Trossachs National Park is Scotland's first national park, located in the west of Scotland."
     },
     {
         question: "Who was the first British Prime Minister?",
         answers: ["Henry Pelham", "Oliver Cromwell", "Admiral Nelson", "Sir Robert Walpole"],
-        correctAnswers: ["Sir Robert Walpole"]
+        correctAnswers: ["Sir Robert Walpole"],
+        explanation: "Sir Robert Walpole is recognised as the first Prime Minister of Great Britain, serving from 1721 to 1742."
     },
     {
         question: "What day does Lent begin?",
         answers: ["Easter Sunday", "Shrove Tuesday", "Easter Monday", "Ash Wednesday"],
-        correctAnswers: ["Ash Wednesday"]
+        correctAnswers: ["Ash Wednesday"],
+        explanation: "Lent begins on Ash Wednesday, the day after Shrove Tuesday (Pancake Day), and lasts 40 days until Easter."
     },
     {
         question: "How old do you need to be to apply for a free TV licence?",
         answers: ["Over 60", "Over 65", "Over 70", "Over 75"],
-        correctAnswers: ["Over 75"]
+        correctAnswers: ["Over 75"],
+        explanation: "People aged over 75 can apply for a free TV licence. Blind people can get a 50% discount at any age."
     }
 ];
 

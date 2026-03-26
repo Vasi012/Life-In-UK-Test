@@ -223,6 +223,18 @@ body {
 
 #retry-btn { margin-top: 12px; }
 
+.footer {
+    text-align: center;
+    padding: 16px 24px;
+    font-size: 0.9rem;
+    color: #b7bee3;
+    margin-top: 28px;
+}
+
+.footer p {
+    margin: 0;
+}
+
 @media (max-width: 760px) {
     .answer-grid { grid-template-columns: 1fr; }
     .hero, .panel { padding: 18px; }
