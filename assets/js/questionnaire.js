@@ -1065,10 +1065,7 @@ const quizQuestionsDataBaseRaw = [...initialQuestions, ...extraQuestions];
 quizQuestionsDataBaseRaw.forEach((q) => {
     if (!q.explanation) {
         const correctText = q.correctAnswers.join(', ');
-        q.explanation = {
-            correct: `Correct answer: ${correctText}. This answer is the best match to the question and the governing fact in British Life in the UK test content.`,
-            incorrect: `Incorrect. The correct answer is ${correctText}. Review the question and the correct option(s) to improve your knowledge for next time.`,
-        };
+        q.explanation = `Correct answer: ${correctText}. Review this to improve your understanding of the topic.`;
     }
 });
 
