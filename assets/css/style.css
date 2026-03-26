@@ -7,8 +7,9 @@ body {
     background: radial-gradient(circle at 30% 10%, #1e2342 0%, #0a0d1a 55%, #03070f 100%);
     font-family: 'Nunito', sans-serif;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     padding: 24px;
 }
 
@@ -228,7 +229,8 @@ body {
     padding: 16px 24px;
     font-size: 0.9rem;
     color: #b7bee3;
-    margin-top: 28px;
+    margin-top: auto;
+    width: 100%;
 }
 
 .footer p {
